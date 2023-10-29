@@ -25,7 +25,7 @@ export function generateYaml(): GitlabCI {
 
   const deploy = new Job()
     .extends(".dagger")
-    .script("fluentci run firebase_pipeline deploy");
+    .script("fluentci run aws_sls_pipeline deploy");
 
   return new GitlabCI()
     .addJob(".docker", docker)

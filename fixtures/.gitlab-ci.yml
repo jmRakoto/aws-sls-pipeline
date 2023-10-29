@@ -24,5 +24,4 @@
 deploy:
   extends: .dagger
   script:
-    - fluentci run firebase_pipeline deploy
-
+    - fluentci run aws_sls_pipeline deploy

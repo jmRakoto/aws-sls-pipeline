@@ -34,9 +34,12 @@ export function generateYaml(): Workflow {
       },
       {
         name: "Run Dagger Pipelines",
-        run: "fluentci run firebase_pipeline deploy",
+        run: "fluentci run aws_sls_pipeline deploy",
         env: {
-          FIREBASE_TOKEN: "${{ secrets.FIREBASE_TOKEN }}",
+          AWS_ACCESS_KEY_ID: "${{ secrets.AWS_ACCESS_KEY_ID }}",
+          SECRET_ACCESS_KEY: "${{ secrets.SECRET_ACCESS_KEY }}",
+          REGION: "${{ secrets.REGION }}",
+          STAGE_ENV: "prod",
         },
       },
     ],

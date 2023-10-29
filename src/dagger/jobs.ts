@@ -1,7 +1,6 @@
 import Client, { connect } from "../../deps.ts";
 
 export enum Job {
-  // build = "build",
   deploy = "deploy",
 }
 
@@ -10,8 +9,9 @@ export const exclude = ["node_modules"];
 export const deploy = async (
   src = ".",
   accessKey?: string,
-  secretKey?: string,
-  region?: string
+  secretAccesKey?: string,
+  region?: string,
+  stageEnv?: string
 ) => {
   await connect(async (client: Client) => {
     const context = client.host().directory(src);
@@ -35,20 +35,20 @@ export const deploy = async (
       )
       .withEnvVariable(
         "SECRET_ACCESS_KEY",
-        Deno.env.get("SECRET_ACCESS_KEY") || secretKey!
+        Deno.env.get("SECRET_ACCESS_KEY") || secretAccesKey!
       )
       .withDirectory("/app", context)
       .withWorkdir("/app")
       .withExec([
         "sh",
         "-c",
-        'mkdir ~/.aws && cp config ~/.aws && cp credentials ~/.aws && sed -i "s|defaultRegion|$REGION|g" ~/.aws/config && sed -i "s|keyId|$AWS_ACCESS_KEY_ID|g" ~/.aws/credentials && sed -i "s|accessKey|$SECRET_ACCESS_KEY|g" ~/.aws/credentials',
+        'mkdir ~/.aws && cp config ~/.aws && cp credentials ~/.aws && sed -i "s|defaultRegion|$REGION|g" ~/.aws/config && sed -i "s|accessKey|$AWS_ACCESS_KEY_ID|g" ~/.aws/credentials && sed -i "s|secretAccessKey|$SECRET_ACCESS_KEY|g" ~/.aws/credentials',
       ])
       .withExec([
         "serverless",
         "deploy",
         "--stage",
-        "dev",
+        Deno.env.get("STAGE_ENV") || stageEnv!,
         "--aws-profile",
         "default",
       ]);
@@ -62,8 +62,9 @@ export const deploy = async (
 export type JobExec = (
   src?: string,
   accessKey?: string,
-  secretKey?: string,
-  region?: string
+  secretAccesKey?: string,
+  region?: string,
+  stageEnv?: string
 ) => Promise<string>;
 
 export const runnableJobs: Record<Job, JobExec> = {
