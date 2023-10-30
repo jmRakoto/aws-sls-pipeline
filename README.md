@@ -4,7 +4,7 @@
 ![deno compatibility](https://shield.deno.dev/deno/^1.37)
 [![](https://img.shields.io/codecov/c/gh/jmRakoto/aws-sls-pipeline)](https://app.codecov.io/gh/jmRakoto/aws-sls-pipeline)
 
-A ready-to-use CI/CD Pipeline for deploying aws serverless
+A ready-to-use CI/CD Pipeline for deploying aws serverless lambda
 
 ## 🚀 Usage
 
